@@ -44,6 +44,27 @@ app.patch('/usuarios/:id', (req, res) => {
     res.json(usuario);
 });
 
+ app.put('/users/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    const { name, age, email } = req.body;
+    const userIndex = users.findIndex(u => u.id === userId);  
+    if (userIndex === -1) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const updatedUser = { id: userId, name, age, email };
+    users[userIndex] = updatedUser;
+    return res.json(updatedUser);
+  });
+
+   app.delete('/users/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    const userIndex = users.findIndex(u => u.id === userId); 
+    if (userIndex === -1) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    users.splice(userIndex, 1);
+    return res.status(204).send();
+  });
 
 
 app.listen(port, () => {
